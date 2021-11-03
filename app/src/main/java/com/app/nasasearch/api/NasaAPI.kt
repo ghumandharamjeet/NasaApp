@@ -12,6 +12,8 @@ interface NasaAPI {
         @Query("q")
         searchQuery: String,
         @Query("page")
-        pageNumber: Int = 1
+        pageNumber: Int = 1,
+        @Query("media_type")
+        mediaType: String = "image"
     ): Response<SearchResponse>
 }

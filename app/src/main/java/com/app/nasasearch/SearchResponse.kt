@@ -3,10 +3,10 @@ package com.app.nasasearch
 import com.google.gson.annotations.SerializedName
 
 data class SearchResponse(
-    val collection: Collection
+    val collection: SearchedCollection
 )
 
-data class Collection (
+data class SearchedCollection (
     val href: String,
     val items: List<Item>,
     val links: List<CollectionLink>,
