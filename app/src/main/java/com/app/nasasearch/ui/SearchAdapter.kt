@@ -7,25 +7,27 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.app.nasasearch.Datum
+import com.app.nasasearch.SearchedItems
 import com.app.nasasearch.R
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.layout_item_search.view.*
 
 class SearchAdapter : RecyclerView.Adapter<SearchAdapter.SearchViewHolder>(){
 
     inner class SearchViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 
-    private val differCallBack = object: DiffUtil.ItemCallback<Datum>(){
+    private val differCallBack = object: DiffUtil.ItemCallback<SearchedItems>(){
 
-        override fun areItemsTheSame(oldItem: Datum, newItem: Datum): Boolean {
-            return oldItem.nasaID == newItem.nasaID
+        override fun areItemsTheSame(oldItem: SearchedItems, newItem: SearchedItems): Boolean {
+            return oldItem.data[0].nasaID == newItem.data[0].nasaID
         }
 
-        override fun areContentsTheSame(oldItem: Datum, newItem: Datum): Boolean {
+        override fun areContentsTheSame(oldItem: SearchedItems, newItem: SearchedItems): Boolean {
             return oldItem == newItem
         }
     }
 
-    private val differ = AsyncListDiffer<Datum>(this, differCallBack)
+    val differ = AsyncListDiffer<SearchedItems>(this, differCallBack)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
 
@@ -40,10 +42,10 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.SearchViewHolder>(){
 
     override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
 
-        val item = differ.currentList[position]
+        val item = (differ.currentList[position])
         holder.itemView.apply {
-           //Glide.with(this).load(collection.href).into(iv_nasa_image)
-            tv_title.text = item.title
+           Glide.with(this).load(item.links[0].href).into(iv_nasa_image)
+            tv_title.text = item.data[0].title
             setOnClickListener {
                 onItemClickListener?.let { it(item) }
             }
@@ -54,9 +56,9 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.SearchViewHolder>(){
         return differ.currentList.size
     }
 
-    private var onItemClickListener: ((Datum) -> Unit)? = null
+    private var onItemClickListener: ((SearchedItems) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (Datum) -> Unit) {
+    fun setOnItemClickListener(listener: (SearchedItems) -> Unit) {
         onItemClickListener = listener
     }
 }

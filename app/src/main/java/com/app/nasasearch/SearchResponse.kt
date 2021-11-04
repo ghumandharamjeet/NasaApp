@@ -1,6 +1,7 @@
 package com.app.nasasearch
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class SearchResponse(
     val collection: SearchedCollection
@@ -8,17 +9,17 @@ data class SearchResponse(
 
 data class SearchedCollection (
     val href: String,
-    val items: List<Item>,
+    val items: MutableList<SearchedItems>,
     val links: List<CollectionLink>,
     val metadata: Metadata,
     val version: String
 )
 
-data class Item (
-    val data: List<Datum>,
+data class SearchedItems (
+    val data: MutableList<Datum>,
     val href: String,
     val links: List<ItemLink>
-)
+): Serializable
 
 data class Datum (
     val center: String,
@@ -36,13 +37,13 @@ data class Datum (
     val nasaID: String,
 
     val title: String
-)
+) : Serializable
 
 data class ItemLink (
     val href: String,
     val rel: String,
     val render: String
-)
+) : Serializable
 
 data class CollectionLink (
     val href: String,
@@ -52,5 +53,5 @@ data class CollectionLink (
 
 data class Metadata (
     @SerializedName("total_hits")
-    val totalHits: Long
+    val totalHits: Int
 )
